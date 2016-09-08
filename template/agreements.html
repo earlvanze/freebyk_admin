@@ -1,0 +1,56 @@
+<h2 class="text-center">
+  {{page_title}}
+</h2>
+
+<div ng-show="agreements.length == 0">
+  None
+</div>
+
+<div class="col-xs-4"
+     ng-repeat="agreement in agreements">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+	#{{agreement.id}}: {{agreement.user.name}}
+      </h3>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+	<div class="col-xs-2 text-right">
+	  From
+	</div>
+	<div class="col-xs-10">
+	  <strong>{{agreement.pickup_station.stationName}}</strong>
+	</div>
+      </div>
+      <div class="row">
+	<div class="col-xs-2 text-right">
+	  To
+	</div>
+	<div class="col-xs-10">
+	  <strong>{{agreement.dropoff_station.stationName}}</strong>
+	</div>
+      </div>
+      <div class="row">
+	<div class="col-xs-2 text-right">
+	  on
+	</div>
+	<div class="col-xs-10">
+	  {{agreement.datetime | date: "medium"}}
+	</div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="row">
+	<div class="col-xs-6">
+	</div>
+	<div class="col-xs-6 text-right">
+	  <button type="button"
+		  class="btn btn-success">
+	    Contact
+	  </button>
+	</div>
+      </div>
+    </div>
+  </div>
+</div>

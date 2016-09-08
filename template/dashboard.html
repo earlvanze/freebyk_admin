@@ -1,0 +1,37 @@
+<h2 class="text-center">
+  Last Week At a Glance
+</h2>
+
+<div class="container">
+<div class="row">
+  <div class="col-sm-6 text-right">
+    Completed Freebyke Deliver{{confirmed_count == 1 ? "y" : "ies"}}
+  </div>
+  <div class="col-sm-1">
+    {{confirmed_count}}
+  </div>
+  <div class="col-sm-1 text-right">
+    {{confirmed_savings | currency: "$"}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6 text-right">
+    Failure to Deliver{{ftd_count == 1 ? "" : "s"}}
+  </div>
+  <div class="col-sm-1">
+    {{ftd_count}}
+  </div>
+  <div class="col-sm-1 text-right" style="color: red">
+    ({{ftd_cost | currency: "$"}})
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6 text-right">
+    Total Saved
+  </div>
+  <div class="col-sm-6">
+    {{total_savings}}
+  </div>
+</div>
+
+</div>

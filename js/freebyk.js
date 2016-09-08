@@ -1,0 +1,99 @@
+angular.module("freebyk", ["ui.bootstrap", "ui.router", "lbServices", "ngResource"])
+
+.config(function($stateProvider, $urlRouterProvider){
+    $stateProvider
+	.state("dashboard",
+	       {
+		   url: "/dashboard",
+		   controller: "dashboard_controller",
+		   templateUrl: "template/dashboard.html"
+	       })
+	.state("login",
+	       {
+		   url: "/login",
+		   controller: "login_controller",
+		   templateUrl: "template/login.html"
+	       })
+	.state("ftds",
+	       {
+		   url: "/ftds",
+		   controller: "ftds_controller",
+		   templateUrl: "template/agreements.html"
+	       })
+	.state("cds",
+	       {
+		   url: "/cds",
+		   controller: "cds_controller",
+		   templateUrl: "template/agreements.html"
+	       })
+    ;
+    $urlRouterProvider.otherwise("/login");
+})
+
+.controller("login_controller", function($scope, $state){
+    $scope.login = function(){
+	$state.go("dashboard");
+    }
+})
+
+.controller("dashboard_controller", function($scope, $filter, Agreement){
+    var $now = $filter('date')(new Date(), 'MMMM d, yyyy HH:mm:ss');
+    $now = new Date().toISOString();
+
+    var $today = new Date();
+    var $last_week = new Date($today);
+    $last_week.setDate($today.getDate() - 7);
+
+    Agreement.ftd({
+	since: $last_week,
+	grace_minutes: 0})
+	.$promise
+	.then(function($response){
+	    $scope.ftd_count = $response.ftds.length;
+	    $scope.ftd_cost = $response.total_distance * 5;
+	});
+
+    Agreement.confirmed({
+	since: $last_week})
+	.$promise
+	.then(function($response){
+	    $scope.confirmed_count = $response.confirmed.length;
+	    $scope.confirmed_savings = $response.total_distance * 10;
+	});
+})
+
+.controller("ftds_controller", function($scope, $filter, Agreement){
+    $scope.page_title = "Failure to Deliver";
+    var $now = $filter('date')(new Date(), 'MMMM d, yyyy HH:mm:ss');
+    $now = new Date().toISOString();
+
+    var $today = new Date();
+    var $last_week = new Date($today);
+    $last_week.setDate($today.getDate() - 7);
+
+    Agreement.ftd({
+	since: $last_week,
+	grace_minutes: 0})
+	.$promise
+	.then(function($response){
+	    $scope.agreements = $response.ftds;
+	});
+})
+
+
+.controller("cds_controller", function($scope, $filter, Agreement){
+    $scope.page_title = "Confirmed Deliveries";
+    var $now = $filter('date')(new Date(), 'MMMM d, yyyy HH:mm:ss');
+    $now = new Date().toISOString();
+
+    var $today = new Date();
+    var $last_week = new Date($today);
+    $last_week.setDate($today.getDate() - 7);
+
+    Agreement.confirmed({
+	since: $last_week})
+	.$promise
+	.then(function($response){
+	    $scope.agreements = $response.confirmed;
+	});
+})
